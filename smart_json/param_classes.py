@@ -60,8 +60,8 @@ class ImmutableAttributeDict(AttributeDict):
     def _mutable_copy(self):
         return recursive_objectify(self, make_immutable=False)
 
-    def _get_pickleable(self):
-        return self.mutable_copy()
+    def __getstate__(self):
+        return self._mutable_copy()
 
 
 def recursive_objectify(nested_dict, make_immutable=True,
