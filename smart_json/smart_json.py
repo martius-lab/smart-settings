@@ -4,7 +4,7 @@ from .param_classes import NoDuplicateDict, recursive_objectify, update_recursiv
 from .dynamic import recursive_dynamic_json
 import collections.abc
 
-IMPORT_KEY = '!import'
+IMPORT_KEY = '__import__'
 
 
 def load_raw_json_from_file(filename):

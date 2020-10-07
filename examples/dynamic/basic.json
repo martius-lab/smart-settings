@@ -1,7 +1,7 @@
 {
   "train_params": {
     "optimizer_params": {
-      "!import": "examples/importing/new_default_optimizer_params.json"
+      "__import__": "examples/importing/new_default_optimizer_params.json"
     },
     "second_optimizer_params": {
       "lr": "{train_params.optimizer_params.lr *5.0}"

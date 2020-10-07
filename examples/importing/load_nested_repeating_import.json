@@ -1,17 +1,17 @@
 {
   "name": "Marin",
-  "!import": "examples/importing/load_twice.json",
+  "__import__": "examples/importing/load_twice.json",
   "train_params": {
     "optimizer_params": {
       "lr": 10.0
     },
     "second_optimizer_params": {
       "lr": 20.0,
-      "!import": "examples/importing/new_default_optimizer_params.json"
+      "__import__": "examples/importing/new_default_optimizer_params.json"
     },
     "third_optimizer_params": {
       "lr": 0.1,
-      "!import": "examples/importing/new_default_optimizer_params.json"
+      "__import__": "examples/importing/new_default_optimizer_params.json"
     }
   }
 }
