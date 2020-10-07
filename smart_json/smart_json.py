@@ -43,7 +43,8 @@ def loads(s, *, dynamic=True, make_immutable=False, recursive_imports=True,
 def _post_load(current_dict, dynamic, make_immutable,
                suppress_invalid_identifier_exception):
     if dynamic:
-        objectified = recursive_objectify(current_dict, make_immutable=False)
+        objectified = recursive_objectify(current_dict, make_immutable=False,
+                                          suppress_invalid_identifier_exception=suppress_invalid_identifier_exception)
         timestamp = datetime.now().strftime('%H:%M:%S-%d%h%y')
         namespace = dict(__timestamp__=timestamp, **objectified)
         recursive_dynamic_json(current_dict, namespace)
