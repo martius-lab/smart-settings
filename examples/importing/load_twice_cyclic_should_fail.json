@@ -1,0 +1,10 @@
+{
+  "name": "Georg",
+  "!import": "examples/importing/defaults_w_cyclic.json",
+  "train_params": {
+    "optimizer_params": {
+      "momentum": 0.1,
+      "!import": "examples/importing/new_default_optimizer_params.json"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "train_params": {
+    "optimizer_params": {
+      "!import": "examples/importing/new_default_optimizer_params.json"
+    },
+    "second_optimizer_params": {
+      "lr": "{train_params.optimizer_params.lr *5.0}"
+    }
+  },
+  "username": "{$USER} bought {$HOME} for ${raw_price+10}",
+  "raw_price": 100,
+  "time": "{__timestamp__}"
+}

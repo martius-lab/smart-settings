@@ -1,0 +1,10 @@
+{
+  "name": "Michal",
+  "train_params": {
+    "num_epochs": 50,
+    "optimizer_params": {
+      "lr": 1e-3,
+      "momentum": 0.9
+    }
+  }
+}
