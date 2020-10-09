@@ -58,22 +58,19 @@ class ImmutableAttributeDict(AttributeDict):
         raise TypeError("Setting object not mutable after settings are fixed!")
 
     def _mutable_copy(self):
-        return recursive_objectify(self, make_immutable=False, suppress_invalid_identifier_exception=True)
+        return recursive_objectify(self, make_immutable=False)
 
     def __getstate__(self):
         return self._mutable_copy()
 
 
-def recursive_objectify(nested_dict, make_immutable=True,
-                        suppress_invalid_identifier_exception=False):
+def recursive_objectify(nested_dict, make_immutable=True):
     "Turns a nested_dict into a nested AttributeDict"
     result = deepcopy(nested_dict)
     for k, v in result.items():
-        if not k.isidentifier() and not suppress_invalid_identifier_exception:
-            raise NameError(f"{k} is not a valid name for a settings object")
         if isinstance(v, collections.Mapping):
             result = dict(result)
-            result[k] = recursive_objectify(v, make_immutable, suppress_invalid_identifier_exception)
+            result[k] = recursive_objectify(v, make_immutable)
     if make_immutable:
         returned_result = ImmutableAttributeDict(result)
     else:
@@ -83,7 +80,6 @@ def recursive_objectify(nested_dict, make_immutable=True,
 
 def update_recursive(d, u, overwrite=False):
     for k, v in u.items():
-
         if isinstance(v, collections.abc.Mapping):
             d[k] = update_recursive(d.get(k, {}), v, overwrite)
         elif k not in d or overwrite:
