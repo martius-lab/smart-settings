@@ -1,0 +1,8 @@
+raw_price: 100
+time: "{__timestamp__}"
+train_params:
+  "second_optimizer_params":
+    "lr": "{train_params.optimizer_params.lr *5.0}"
+  "optimizer_params":
+    "__import__": "examples/importing/new_default_optimizer_params.json"
+username: "{$USER} bought {$HOME} for ${raw_price+10}"
