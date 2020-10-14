@@ -27,7 +27,6 @@ def fstring_in_json(format_string, namespace):
         return format_string
 
     replaced_dollar_signs = replace_inside_brackets(format_string, '$', 'ENV_')
-    print(type(replaced_dollar_signs), replaced_dollar_signs)
     env_dict = {'ENV_' + key: value for key, value in os.environ.items()}
     try:
         formatted = eval('f\"' + replaced_dollar_signs +
