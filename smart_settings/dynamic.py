@@ -32,7 +32,7 @@ def fstring_in_json(format_string, namespace):
         formatted = eval('f\"' + replaced_dollar_signs +
                          '\"', {**env_dict, **namespace})
     except BaseException as e:
-	print(f"Dynamic settings {replaced_dollar_signs} failed with error {e}")
+        print(f"Dynamic settings {replaced_dollar_signs} failed with error {e}")
         return format_string
 
     if formatted == format_string:
