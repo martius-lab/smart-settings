@@ -8,5 +8,5 @@ setup(name='smart_settings',
       author_email='michalrolinek@gmail.com',
       license='MIT',
       packages=['smart_settings'],
-      install_requires=[],
+      install_requires=['pyyaml'],
       zip_safe=False)

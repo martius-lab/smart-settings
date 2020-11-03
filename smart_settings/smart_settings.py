@@ -3,15 +3,22 @@ import json
 from .param_classes import NoDuplicateDict, recursive_objectify, update_recursive
 from .dynamic import recursive_dynamic_json
 import collections.abc
+import yaml
 
 IMPORT_KEY = '__import__'
 
 
-def load_raw_json_from_file(filename):
+def load_raw_dict_from_file(filename):
     """ Safe load of a json file (doubled entries raise exception)"""
-    with open(filename, 'r') as f:
-        data = json.load(f, object_pairs_hook=NoDuplicateDict)
-    return data
+    if filename.endswith('.json'):
+        with open(filename, 'r') as f:
+            data = json.load(f, object_pairs_hook=NoDuplicateDict)
+        return data
+    elif filename.endswith('.yaml'):
+        with open(filename, 'r') as f:
+            data = yaml.safe_load(f)
+        return data
+
 
 
 def load(filename, dynamic=True, make_immutable=True, recursive_imports=True,
@@ -19,7 +26,7 @@ def load(filename, dynamic=True, make_immutable=True, recursive_imports=True,
     """ Read from a bytestream and deserialize to a settings object"""
     pre_unpack_hooks = pre_unpack_hooks or []
     post_unpack_hooks = post_unpack_hooks or []
-    orig_json = load_raw_json_from_file(filename)
+    orig_json = load_raw_dict_from_file(filename)
 
     for hook in pre_unpack_hooks:
         hook(orig_json)
@@ -39,17 +46,23 @@ def loads(s, *, dynamic=True, make_immutable=False, recursive_imports=True,
     pre_unpack_hooks = pre_unpack_hooks or []
     post_unpack_hooks = post_unpack_hooks or []
 
-    orig_json = json.loads(s, object_pairs_hook=NoDuplicateDict)
+    try:
+        orig_dict = json.loads(s, object_pairs_hook=NoDuplicateDict)
+    except json.JSONDecodeError as e_json:
+        try:
+            orig_dict = yaml.safe_load(s)
+        except yaml.YAMLError as e_yaml:
+            raise SyntaxError(f"JSON and YAML parsing failed: {e_json}, {e_yaml}")
 
     for hook in pre_unpack_hooks:
-        hook(orig_json)
+        hook(orig_dict)
 
     if recursive_imports:
         unpack_imports_full(
-            orig_json,
+            orig_dict,
             import_string=IMPORT_KEY,
             used_filenames=[])
-    return _post_load(orig_json, dynamic, make_immutable, post_unpack_hooks)
+    return _post_load(orig_dict, dynamic, make_immutable, post_unpack_hooks)
 
 
 def _post_load(current_dict, dynamic, make_immutable, post_unpack_hooks):
@@ -84,7 +97,7 @@ def unpack_imports_fixed_level(orig_dict, import_string, used_filenames):
         if new_file in used_filenames:
             raise ValueError(
                 f"Cyclic dependency of JSONs, {new_file} already unpacked")
-        loaded_dict = load_raw_json_from_file(new_file)
+        loaded_dict = load_raw_dict_from_file(new_file)
         unpack_imports_full(
             loaded_dict,
             import_string,
