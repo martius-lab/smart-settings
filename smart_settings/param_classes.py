@@ -57,6 +57,11 @@ class ImmutableAttributeDict(AttributeDict):
     def __setitem__(self, key, value):
         raise TypeError("Setting object not mutable after settings are fixed!")
 
+    def __reduce__(self):
+        # For overwriting dict pickling
+        # https://stackoverflow.com/questions/21144845/how-can-i-unpickle-a-subclass-of-dict-that-validates-with-setitem-in-pytho
+        return (AttributeDict, (), self.__getstate__())
+
     def _mutable_copy(self):
         return recursive_objectify(self, make_immutable=False)
 
