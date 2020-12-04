@@ -60,7 +60,7 @@ class ImmutableAttributeDict(AttributeDict):
     def __reduce__(self):
         # For overwriting dict pickling
         # https://stackoverflow.com/questions/21144845/how-can-i-unpickle-a-subclass-of-dict-that-validates-with-setitem-in-pytho
-        return (AttributeDict, (), self.__getstate__())
+        return (AttributeDict, (self.__getstate__(),))
 
     def _mutable_copy(self):
         return recursive_objectify(self, make_immutable=False)
@@ -90,3 +90,13 @@ def update_recursive(d, u, overwrite=False):
         elif k not in d or overwrite:
             d[k] = v
     return d
+
+
+import pickle
+
+d = dict(a=8, c=7)
+id = ImmutableAttributeDict(d)
+
+s = pickle.dumps(id)
+c = pickle.loads(s)
+print(c.a)
