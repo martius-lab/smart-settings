@@ -1,0 +1,9 @@
+{
+  "train_params": {
+    "num_epochs": 50,
+    "optimizer_params": {
+      "momentum": 0.9,
+      "__import__": "examples/importing/new_default_optimizer_params.json"
+    }
+  }
+}
