@@ -1,0 +1,7 @@
+{
+  "train_params": {
+    "optimizer_params": {
+      "momentum": 0.8
+    }
+  }
+}

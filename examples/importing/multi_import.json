@@ -1,0 +1,12 @@
+{
+  "__import__": [
+      "examples/importing/multi_import_user.json",
+      "examples/importing/multi_import_train_params.json",
+      "examples/importing/multi_import_new_train_params.json"
+  ],
+  "train_params": {
+    "optimizer_params": {
+      "lr": 1e-3
+    }
+  }
+}

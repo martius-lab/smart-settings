@@ -91,19 +91,30 @@ def unpack_imports_full(orig_dict, import_string, used_filenames):
 
 
 def unpack_imports_fixed_level(orig_dict, import_string, used_filenames):
+    """
+    If new_files is a list with len(new_files) > 1, items later in the list take
+    precedence over files earlier in the list, i.e. keys specified in files later
+    in the list override keys specified in files earlier in the list. Keys specified
+    in the file that imports the other files have the highest priority and override
+    everything else.
+    """
+
     if import_string in orig_dict:
-        new_file = orig_dict[import_string]
+        new_files = orig_dict[import_string] # type(orig_dict[import_string]) in [str, list]
+        if isinstance(new_files, str):
+            new_files = [new_files]
         del orig_dict[import_string]
-        if new_file in used_filenames:
-            raise ValueError(
-                f"Cyclic dependency of JSONs, {new_file} already unpacked")
-        loaded_dict = load_raw_dict_from_file(new_file)
-        unpack_imports_full(
-            loaded_dict,
-            import_string,
-            used_filenames +
-            [new_file])
-        update_recursive(orig_dict, loaded_dict, overwrite=False)
+        for new_file in reversed(new_files):
+            if new_file in used_filenames:
+                raise ValueError(
+                    f"Cyclic dependency of JSONs, {new_file} already unpacked")
+            loaded_dict = load_raw_dict_from_file(new_file)
+            unpack_imports_full(
+                loaded_dict,
+                import_string,
+                used_filenames +
+                [new_file])
+            update_recursive(orig_dict, loaded_dict, overwrite=False)
 
 
 if __name__ == '__main__':
