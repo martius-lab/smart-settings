@@ -1,0 +1,6 @@
+{
+    "__import__": [
+        "examples/importing/defaults.json"
+    ],
+    "optimize_over*": ["c"]
+}

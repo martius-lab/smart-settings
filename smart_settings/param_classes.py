@@ -1,6 +1,7 @@
 import collections
 from copy import deepcopy
 import json
+from .utils import removesuffix
 
 
 class NoDuplicateDict(dict):
@@ -87,6 +88,14 @@ def update_recursive(d, u, overwrite=False):
     for k, v in u.items():
         if isinstance(v, collections.abc.Mapping):
             d[k] = update_recursive(d.get(k, {}), v, overwrite)
+        if isinstance(v, collections.abc.Sequence):
+            raw_key = removesuffix(k, '*')
+            if raw_key + "*" in d:  # append
+                d[raw_key + "*"] = deepcopy(v + d[raw_key + '*'])
+            elif raw_key in d:  # keep original list
+                pass
+            else:  # key does not exist yet, append
+                d[k] = v 
         elif k not in d or overwrite:
             d[k] = v
     return d
