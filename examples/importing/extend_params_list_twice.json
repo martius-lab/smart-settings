@@ -1,0 +1,6 @@
+{
+    "__import__": [
+        "examples/importing/extend_params_list.json"
+    ],
+    "optimize_over*": ["d"]
+}

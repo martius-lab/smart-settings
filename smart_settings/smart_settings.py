@@ -4,6 +4,7 @@ from .param_classes import NoDuplicateDict, recursive_objectify, update_recursiv
 from .dynamic import recursive_dynamic_json
 import collections.abc
 import yaml
+from .utils import removesuffix
 
 IMPORT_KEY = '__import__'
 
@@ -66,6 +67,12 @@ def loads(s, *, dynamic=True, make_immutable=False, recursive_imports=True,
 
 
 def _post_load(current_dict, dynamic, make_immutable, post_unpack_hooks):
+    keys = list(current_dict.keys())  # to avoid that list of keys gets updated during loop
+    for key in keys:
+        if key.endswith("*") and isinstance(current_dict[key], collections.abc.Sequence):
+            raw_key = removesuffix(key, "*")
+            current_dict[raw_key] = current_dict.pop(key)
+
     if dynamic:
         objectified = recursive_objectify(current_dict, make_immutable=False)
         timestamp = datetime.now().strftime('%H:%M:%S-%d%h%y')
