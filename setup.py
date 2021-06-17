@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='smart_settings',
-      version='1.0',
+      version='1.1',
       description='Smart JSON setting files',
       url='https://github.com/mrolinek',
       author='Michal Rolinek, MPI-IS Tuebingen, Autonomous Learning',
