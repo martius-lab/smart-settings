@@ -45,15 +45,15 @@ def fstring_in_json(format_string, namespace):
 
 def recursive_dynamic_json(nested_dict_or_list, namespace):
     "Evaluates each key in nested dict as an f-string within a given namespace"
-    if isinstance(nested_dict_or_list, collections.Mapping):
+    if isinstance(nested_dict_or_list, collections.abc.Mapping):
         for k, v in nested_dict_or_list.items():
-            if isinstance(v, collections.Mapping) or isinstance(v, list):
+            if isinstance(v, collections.abc.Mapping) or isinstance(v, list):
                 recursive_dynamic_json(v, namespace)
             else:
                 nested_dict_or_list[k] = fstring_in_json(v, namespace)
     elif isinstance(nested_dict_or_list, list):
         for i, item in enumerate(nested_dict_or_list):
-            if isinstance(item, collections.Mapping) or isinstance(item, list):
+            if isinstance(item, collections.abc.Mapping) or isinstance(item, list):
                 recursive_dynamic_json(item, namespace)
             else:
                 nested_dict_or_list[i] = fstring_in_json(item, namespace)
