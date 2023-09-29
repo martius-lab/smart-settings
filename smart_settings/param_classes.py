@@ -74,7 +74,7 @@ def recursive_objectify(nested_dict, make_immutable=True):
     "Turns a nested_dict into a nested AttributeDict"
     result = deepcopy(nested_dict)
     for k, v in result.items():
-        if isinstance(v, collections.Mapping):
+        if isinstance(v, collections.abc.Mapping):
             result = dict(result)
             result[k] = recursive_objectify(v, make_immutable)
     if make_immutable:
