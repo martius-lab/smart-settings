@@ -29,7 +29,9 @@ def change_key_name(setting_file, prefixes, old_name, new_name, conditions=None)
     if old_name in as_dict:
         old_val = as_dict[old_name]
         as_dict[new_name] = old_val
-        print(f"{setting_file}: Key {'.'.join(prefixes+[old_name])} renamed to {'.'.join(prefixes+[new_name])}")
+        print(
+            f"{setting_file}: Key {'.'.join(prefixes+[old_name])} renamed to {'.'.join(prefixes+[new_name])}"
+        )
         del as_dict[old_name]
         with open(setting_file, "w") as f:
             json.dump(orig_dict, f, indent=4)
@@ -40,13 +42,16 @@ def change_key_name(setting_file, prefixes, old_name, new_name, conditions=None)
 
 def check_correct_conditions(dct, conditions):
     for lhs, rhs in conditions.items():
-        if not rhs == dct.get(lhs, float('nan')):  # using that 'nan' is not equal to ANYTHING in Python
-
+        if not rhs == dct.get(
+            lhs, float("nan")
+        ):  # using that 'nan' is not equal to ANYTHING in Python
             return False
     return True
 
 
-def add_key(setting_file, prefixes, new_key, default_value, override=False, conditions=None):
+def add_key(
+    setting_file, prefixes, new_key, default_value, override=False, conditions=None
+):
     conditions = conditions or {}
 
     with open(setting_file) as f:
@@ -68,7 +73,9 @@ def add_key(setting_file, prefixes, new_key, default_value, override=False, cond
 
     if new_key in as_dict:
         if override:
-            print(f"{setting_file}: Overwrote {'.'.join(prefixes+[new_key])}={default_value} (from {as_dict[new_key]})")
+            print(
+                f"{setting_file}: Overwrote {'.'.join(prefixes+[new_key])}={default_value} (from {as_dict[new_key]})"
+            )
             as_dict[new_key] = default_value
         else:
             print(f"{setting_file}: Key {new_key} already present, not overwriting...")
@@ -80,4 +87,3 @@ def add_key(setting_file, prefixes, new_key, default_value, override=False, cond
     with open(setting_file, "w") as f:
         json.dump(orig_dict, f, indent=4)
     return True
-

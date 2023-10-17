@@ -6,25 +6,30 @@ import collections.abc
 import yaml
 from .utils import removesuffix
 
-IMPORT_KEY = '__import__'
+IMPORT_KEY = "__import__"
 
 
 def load_raw_dict_from_file(filename):
-    """ Safe load of a json file (doubled entries raise exception)"""
-    if filename.endswith('.json'):
-        with open(filename, 'r') as f:
+    """Safe load of a json file (doubled entries raise exception)"""
+    if filename.endswith(".json"):
+        with open(filename, "r") as f:
             data = json.load(f, object_pairs_hook=NoDuplicateDict)
         return data
-    elif filename.endswith('.yaml'):
-        with open(filename, 'r') as f:
+    elif filename.endswith(".yaml"):
+        with open(filename, "r") as f:
             data = yaml.safe_load(f)
         return data
 
 
-
-def load(filename, dynamic=True, make_immutable=True, recursive_imports=True,
-         pre_unpack_hooks=None, post_unpack_hooks=None):
-    """ Read from a bytestream and deserialize to a settings object"""
+def load(
+    filename,
+    dynamic=True,
+    make_immutable=True,
+    recursive_imports=True,
+    pre_unpack_hooks=None,
+    post_unpack_hooks=None,
+):
+    """Read from a bytestream and deserialize to a settings object"""
     pre_unpack_hooks = pre_unpack_hooks or []
     post_unpack_hooks = post_unpack_hooks or []
     orig_json = load_raw_dict_from_file(filename)
@@ -34,16 +39,21 @@ def load(filename, dynamic=True, make_immutable=True, recursive_imports=True,
 
     if recursive_imports:
         unpack_imports_full(
-            orig_json,
-            import_string=IMPORT_KEY,
-            used_filenames=[filename])
-    return _post_load(orig_json, dynamic, make_immutable,
-                      post_unpack_hooks)
+            orig_json, import_string=IMPORT_KEY, used_filenames=[filename]
+        )
+    return _post_load(orig_json, dynamic, make_immutable, post_unpack_hooks)
 
 
-def loads(s, *, dynamic=True, make_immutable=False, recursive_imports=True,
-          pre_unpack_hooks=None, post_unpack_hooks=None):
-    """ Deserialize string to a settings object"""
+def loads(
+    s,
+    *,
+    dynamic=True,
+    make_immutable=False,
+    recursive_imports=True,
+    pre_unpack_hooks=None,
+    post_unpack_hooks=None,
+):
+    """Deserialize string to a settings object"""
     pre_unpack_hooks = pre_unpack_hooks or []
     post_unpack_hooks = post_unpack_hooks or []
 
@@ -59,23 +69,24 @@ def loads(s, *, dynamic=True, make_immutable=False, recursive_imports=True,
         hook(orig_dict)
 
     if recursive_imports:
-        unpack_imports_full(
-            orig_dict,
-            import_string=IMPORT_KEY,
-            used_filenames=[])
+        unpack_imports_full(orig_dict, import_string=IMPORT_KEY, used_filenames=[])
     return _post_load(orig_dict, dynamic, make_immutable, post_unpack_hooks)
 
 
 def _post_load(current_dict, dynamic, make_immutable, post_unpack_hooks):
-    keys = list(current_dict.keys())  # to avoid that list of keys gets updated during loop
+    keys = list(
+        current_dict.keys()
+    )  # to avoid that list of keys gets updated during loop
     for key in keys:
-        if key.endswith("*") and isinstance(current_dict[key], collections.abc.Sequence):
+        if key.endswith("*") and isinstance(
+            current_dict[key], collections.abc.Sequence
+        ):
             raw_key = removesuffix(key, "*")
             current_dict[raw_key] = current_dict.pop(key)
 
     if dynamic:
         objectified = recursive_objectify(current_dict, make_immutable=False)
-        timestamp = datetime.now().strftime('%H:%M:%S-%d%h%y')
+        timestamp = datetime.now().strftime("%H:%M:%S-%d%h%y")
         namespace = dict(__timestamp__=timestamp, **objectified)
         recursive_dynamic_json(current_dict, namespace)
 
@@ -107,29 +118,31 @@ def unpack_imports_fixed_level(orig_dict, import_string, used_filenames):
     """
 
     if import_string in orig_dict:
-        new_files = orig_dict[import_string] # type(orig_dict[import_string]) in [str, list]
+        new_files = orig_dict[
+            import_string
+        ]  # type(orig_dict[import_string]) in [str, list]
         if isinstance(new_files, str):
             new_files = [new_files]
         del orig_dict[import_string]
         for new_file in reversed(new_files):
             if new_file in used_filenames:
                 raise ValueError(
-                    f"Cyclic dependency of JSONs, {new_file} already unpacked")
+                    f"Cyclic dependency of JSONs, {new_file} already unpacked"
+                )
             loaded_dict = load_raw_dict_from_file(new_file)
-            unpack_imports_full(
-                loaded_dict,
-                import_string,
-                used_filenames +
-                [new_file])
+            unpack_imports_full(loaded_dict, import_string, used_filenames + [new_file])
             update_recursive(orig_dict, loaded_dict, overwrite=False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     def check_import_in_fixed_params(setting_dict):
         if "fixed_params" in setting_dict:
-            if "__import__" in setting_dict['fixed_params']:
-                raise ImportError("Cannot import inside fixed params. Did you mean __import_promise__?")
+            if "__import__" in setting_dict["fixed_params"]:
+                raise ImportError(
+                    "Cannot import inside fixed params. Did you mean __import_promise__?"
+                )
+
     params = load(sys.argv[1], pre_unpack_hooks=[check_import_in_fixed_params])
     print(params)
