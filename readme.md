@@ -4,12 +4,14 @@ A nifty little wrapper around settings files. Particularly useful for cluster ut
 
 ## Run to install:
 
-``python3 -m pip install git+https://gitlab.tuebingen.mpg.de/mrolinek/smart-json.git``
+```bash
+python3 -m pip install git+https://gitlab.tuebingen.mpg.de/mrolinek/smart-json.git
+```
 
 
 ## Main features
 
-* **JSON/YAML support** Both file formats are supported.
+* **Supports JSON, YAML and TOML files.**
 
 * **Duplicate check**. Duplicate keys in JSONs are caught and raise an exception.
 
@@ -21,21 +23,21 @@ A nifty little wrapper around settings files. Particularly useful for cluster ut
 
 ## API for changing keys in many files
 
-``
+```bash
 python3 -m smart_settings.change_key settings/*.json train_params.opt_params optimizer_params
-``
+```
 
 --> Changes `train_params.opt_params` to `train_params.optimizer_params` in every file matching the wildcard
 
-``
+```bash
 python3 -m smart_settings.add_key settings/*.json  train_params.num_epochs 10 --override
-``
+```
 
 --> Adds key `train_params.num_epochs` with value `10`. `--override` controls overwriting of present values
 
-``
+```bash
 python3 -m smart_settings.port_cluster_utils_3 settings/**/*.json
-``
+```
 
 --> Performs all name changes required for porting to `cluster_utils >=3.0`
 

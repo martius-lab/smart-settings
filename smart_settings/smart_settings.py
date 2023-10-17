@@ -3,22 +3,34 @@ import json
 from .param_classes import NoDuplicateDict, recursive_objectify, update_recursive
 from .dynamic import recursive_dynamic_json
 import collections.abc
+
+try:
+    import tomllib
+except ImportError:
+    # tomllib was added in Python 3.11.  Older versions can use tomli
+    import tomli as tomllib
 import yaml
+
 from .utils import removesuffix
 
 IMPORT_KEY = "__import__"
 
 
 def load_raw_dict_from_file(filename):
-    """Safe load of a json file (doubled entries raise exception)"""
+    """Safe load of a json/yaml/toml file (doubled entries raise exception)."""
     if filename.endswith(".json"):
         with open(filename, "r") as f:
             data = json.load(f, object_pairs_hook=NoDuplicateDict)
-        return data
     elif filename.endswith(".yaml"):
         with open(filename, "r") as f:
             data = yaml.safe_load(f)
-        return data
+    elif filename.endswith(".toml"):
+        with open(filename, "rb") as f:
+            data = tomllib.load(f)
+    else:
+        raise RuntimeError("Unsupported file type.")
+
+    return data
 
 
 def load(

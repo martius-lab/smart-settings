@@ -9,6 +9,9 @@ setup(
     author_email="michalrolinek@gmail.com",
     license="MIT",
     packages=["smart_settings"],
-    install_requires=["pyyaml"],
+    install_requires=[
+        "pyyaml",
+        "tomli; python_version < '3.11'",
+    ],
     zip_safe=False,
 )
