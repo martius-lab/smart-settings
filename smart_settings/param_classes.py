@@ -5,22 +5,21 @@ from .utils import removesuffix
 
 
 class NoDuplicateDict(dict):
-    """ A dict with prohibiting init from a list of pairs containing duplicates"""
+    """A dict with prohibiting init from a list of pairs containing duplicates"""
 
     def __init__(self, *args, **kwargs):
         if args and args[0] and not isinstance(args[0], dict):
             keys, _ = zip(*args[0])
             duplicates = [
-                item for item,
-                count in collections.Counter(keys).items() if count > 1]
+                item for item, count in collections.Counter(keys).items() if count > 1
+            ]
             if duplicates:
-                raise TypeError(
-                    "Keys {} repeated in json parsing".format(duplicates))
+                raise TypeError("Keys {} repeated in json parsing".format(duplicates))
         super().__init__(*args, **kwargs)
 
 
 class AttributeDict(dict):
-    """ A dict which allows attribute access to its keys."""
+    """A dict which allows attribute access to its keys."""
 
     def __getattr__(self, *args, **kwargs):
         try:
@@ -29,9 +28,10 @@ class AttributeDict(dict):
             raise AttributeError(e)
 
     def __deepcopy__(self, memo):
-        """ In order to support deepcopy"""
+        """In order to support deepcopy"""
         return self.__class__(
-            [(deepcopy(k, memo=memo), deepcopy(v, memo=memo)) for k, v in self.items()])
+            [(deepcopy(k, memo=memo), deepcopy(v, memo=memo)) for k, v in self.items()]
+        )
 
     def __setattr__(self, key, value):
         self.__setitem__(key, value)
@@ -44,7 +44,7 @@ class AttributeDict(dict):
 
 
 class ImmutableAttributeDict(AttributeDict):
-    """ A dict which allows attribute access to its keys. Forced immutable."""
+    """A dict which allows attribute access to its keys. Forced immutable."""
 
     def __delattr__(self, item):
         raise TypeError("Setting object not mutable after settings are fixed!")
@@ -89,13 +89,13 @@ def update_recursive(d, u, overwrite=False):
         if isinstance(v, collections.abc.Mapping):
             d[k] = update_recursive(d.get(k, {}), v, overwrite)
         if isinstance(v, collections.abc.Sequence):
-            raw_key = removesuffix(k, '*')
+            raw_key = removesuffix(k, "*")
             if raw_key + "*" in d:  # append
-                d[raw_key + "*"] = deepcopy(v + d[raw_key + '*'])
+                d[raw_key + "*"] = deepcopy(v + d[raw_key + "*"])
             elif raw_key in d:  # keep original list
                 pass
             else:  # key does not exist yet, append
-                d[k] = v 
+                d[k] = v
         elif k not in d or overwrite:
             d[k] = v
     return d

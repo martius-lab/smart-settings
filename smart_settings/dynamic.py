@@ -3,34 +3,32 @@ import collections
 
 
 def _replace_inside_brackets(string, replace_from, replace_to):
-    index = string.find('{')
+    index = string.find("{")
     if index == -1:
         yield string
         return
-    yield string[:index + 1]
-    new_index = string[index + 1:].find('}')
+    yield string[: index + 1]
+    new_index = string[index + 1 :].find("}")
     if new_index == -1:
         yield from string[index:]
         return
     new_index += index + 1
-    yield string[index + 1:new_index].replace(replace_from, replace_to)
+    yield string[index + 1 : new_index].replace(replace_from, replace_to)
     yield from _replace_inside_brackets(string[new_index:], replace_from, replace_to)
 
 
 def replace_inside_brackets(string, replace_from, replace_to):
-    return ''.join(list(_replace_inside_brackets(
-        string, replace_from, replace_to)))
+    return "".join(list(_replace_inside_brackets(string, replace_from, replace_to)))
 
 
 def fstring_in_json(format_string, namespace):
     if not isinstance(format_string, str):
         return format_string
 
-    replaced_dollar_signs = replace_inside_brackets(format_string, '$', 'ENV_')
-    env_dict = {'ENV_' + key: value for key, value in os.environ.items()}
+    replaced_dollar_signs = replace_inside_brackets(format_string, "$", "ENV_")
+    env_dict = {"ENV_" + key: value for key, value in os.environ.items()}
     try:
-        formatted = eval('f\"' + replaced_dollar_signs +
-                         '\"', {**env_dict, **namespace})
+        formatted = eval('f"' + replaced_dollar_signs + '"', {**env_dict, **namespace})
     except BaseException as e:
         return format_string
 
