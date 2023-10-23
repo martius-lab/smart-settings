@@ -21,7 +21,7 @@ def load_raw_dict_from_file(filename):
     if filename.endswith(".json"):
         with open(filename, "r") as f:
             data = json.load(f, object_pairs_hook=NoDuplicateDict)
-    elif filename.endswith(".yaml"):
+    elif filename.endswith(".yaml") or filename.endswith(".yml"):
         with open(filename, "r") as f:
             data = yaml.safe_load(f)
     elif filename.endswith(".toml"):
