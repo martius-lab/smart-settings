@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smart-settings"
+dynamic = ["version"]
+description = "Smart setting files"
+license = "MIT"
+authors = [
+    { name = "Michal Rolinek", email = "michalrolinek@gmail.com" },
+]
+dependencies = [
+    "pyyaml",
+    "tomli; python_version < '3.11'",
+]
+
+[project.urls]
+Source = "https://github.com/martius-lab/smart-settings"
+
+[tool.hatch.version]
+path = "smart_settings/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/smart_settings",
+]
