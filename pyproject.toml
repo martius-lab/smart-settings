@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -19,7 +19,7 @@ dependencies = [
 Source = "https://github.com/martius-lab/smart-settings"
 
 [tool.hatch.version]
-path = "smart_settings/__init__.py"
+source = "vcs"
 
 [tool.hatch.build.targets.sdist]
 include = [
