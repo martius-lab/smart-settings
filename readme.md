@@ -5,7 +5,7 @@ A nifty little wrapper around settings files. Particularly useful for cluster ut
 ## Run to install:
 
 ```bash
-python3 -m pip install git+https://gitlab.tuebingen.mpg.de/mrolinek/smart-json.git
+python3 -m pip install git+https://github.com/martius-lab/smart-settings.git
 ```
 
 
