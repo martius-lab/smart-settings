@@ -9,6 +9,12 @@ description = "Smart setting files"
 license = "MIT"
 authors = [
     { name = "Michal Rolinek", email = "michalrolinek@gmail.com" },
+    { name = "Sebastian Blaes" },
+    { name = "Marin Vlastelica" },
+    { name = "Felix Kloss" },
+]
+maintainers = [
+    { name = "Autonomous Learning Group @ University of Tübingen" },
 ]
 dependencies = [
     "pyyaml",
