@@ -28,6 +28,7 @@ classifiers = [
 
 [project.urls]
 Source = "https://github.com/martius-lab/smart-settings"
+"Bug Tracker" = "https://github.com/martius-lab/smart-settings/issues"
 
 [tool.hatch.version]
 source = "vcs"
