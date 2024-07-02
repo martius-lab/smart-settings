@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smart-settings"
+dynamic = ["version"]
+description = "Smart setting files"
+license = "MIT"
+authors = [
+    { name = "Michal Rolinek", email = "michalrolinek@gmail.com" },
+    { name = "Sebastian Blaes" },
+    { name = "Marin Vlastelica" },
+    { name = "Felix Kloss" },
+]
+maintainers = [
+    { name = "Autonomous Learning Group @ University of Tübingen" },
+]
+dependencies = [
+    "pyyaml",
+    "tomli; python_version < '3.11'",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Source = "https://github.com/martius-lab/smart-settings"
+"Bug Tracker" = "https://github.com/martius-lab/smart-settings/issues"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/smart_settings",
+]
