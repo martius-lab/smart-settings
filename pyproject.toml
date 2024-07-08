@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "smart-settings"
 dynamic = ["version"]
 description = "Smart setting files"
+readme = "readme.md"
 license = "MIT"
 authors = [
     { name = "Michal Rolinek", email = "michalrolinek@gmail.com" },
