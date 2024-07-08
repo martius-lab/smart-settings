@@ -3,9 +3,10 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "smart-settings"
+name = "al-smart-settings"
 dynamic = ["version"]
 description = "Smart setting files"
+readme = "readme.md"
 license = "MIT"
 authors = [
     { name = "Michal Rolinek", email = "michalrolinek@gmail.com" },
@@ -37,3 +38,6 @@ source = "vcs"
 include = [
     "/smart_settings",
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["smart_settings"]

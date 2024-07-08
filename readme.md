@@ -1,11 +1,12 @@
-# Smart settings
+# Smart Settings
 
-A nifty little wrapper around settings files. Particularly useful for cluster utils
+A nifty little wrapper around settings files. Particularly useful for
+[cluster utils](https://martius-lab.github.io/cluster_utils/).
 
 ## Run to install:
 
 ```bash
-python3 -m pip install git+https://github.com/martius-lab/smart-settings.git
+python3 -m pip install al-smart-settings
 ```
 
 
